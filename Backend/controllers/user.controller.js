@@ -77,7 +77,7 @@ module.exports.loginUser = async (req, res, next) => {
 
     // Generate JWT token
     const token = user.generateAuthToken();
-
+    res.cookie('token', token);
     // Remove the password field before sending the response
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
@@ -88,3 +88,12 @@ module.exports.loginUser = async (req, res, next) => {
     next(err); // Pass any unexpected errors to the global error handler
   }
 };
+
+module.exports.getProfile = async (req, res, next) => {
+    try {
+        const user = req.user;
+        res.status(200).json(user);
+    } catch (err) {
+        next(err);
+    }
+}
