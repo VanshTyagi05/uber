@@ -1,3 +1,4 @@
+const BlacklistToken = require("../models/blacklistToken.model.js");
 const userModel = require("../models/user.model.js");
 const userService = require("../services/user.services.js");
 const bcrypt = require("bcrypt");
@@ -97,3 +98,19 @@ module.exports.getProfile = async (req, res, next) => {
         next(err);
     }
 }
+
+module.exports.logoutUser = async (req, res, next) => {
+    try {
+      const token = req.token; // Get token from auth middleware
+  
+      // Clear cookie
+      res.clearCookie('token');
+  
+      // Add token to blacklist
+      await BlacklistToken.create({ token });
+  
+      res.status(200).json({ message: 'Logout successful' });
+    } catch (err) {
+      next(err);
+    }
+  };
