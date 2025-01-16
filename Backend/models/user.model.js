@@ -1,17 +1,16 @@
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const userSchema = new mongoose.Schema({
-  fullname:{
-    firstName: {
+  fullname: {
+    firstname: {
       type: String,
       required: true,
       trim: true,
     },
-    lastName: {
+    lastname: {
       type: String,
-      required: true,
       trim: true,
     }
   },
@@ -26,7 +25,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select:false,
+    select: false,
     minlength: 6,
   },
   role: {
@@ -35,7 +34,7 @@ const userSchema = new mongoose.Schema({
     default: 'user',
   },
   profileImage: {
-    type: String, 
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -45,23 +44,24 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
-  socketId:{
-    type:String
+  socketId: {
+    type: String
   }
 });
 
-
+// Method to generate JWT
 userSchema.methods.generateAuthToken = function () {
   const user = this;
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
   return token;
 };
 
+// Method to check password match
 userSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+// Static method to hash password
 userSchema.static.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 };

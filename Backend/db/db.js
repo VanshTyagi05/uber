@@ -9,6 +9,5 @@ function connectdb() {
             console.error('Database connection error:', error.message);
             process.exit(1); // Exit the process with failure
         });
-}
-
+    }
 module.exports = connectdb;
