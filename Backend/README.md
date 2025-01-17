@@ -229,3 +229,107 @@ curl --request POST \
 ```
 
 Please note that you'll need to implement the blacklist functionality in your backend code to store and validate the blacklisted tokens.
+
+#### Register Captain API Documentation
+
+This documentation provides a detailed guide for the Register Captain API endpoint, including request structure, validation rules, and expected responses.
+
+Endpoint Details
+#### URL
+POST /captain/register
+
+Headers
+Key	Value	Required
+Authorization	Bearer <token>	No
+Content-Type	application/json	Yes
+Request Body
+The request body must contain both personal details and vehicle details as a JSON object.
+
+Personal Details
+Field	Type	Description	Required
+fullname.firstname	string	The first name of the captain.	Yes
+fullname.lastname	string	The last name of the captain.	Yes
+email	string	The email address of the captain (must be unique).	Yes
+password	string	A secure password for the captain's account.	Yes
+Vehicle Details
+Field	Type	Description	Required
+vehicle.color	string	The color of the captain's vehicle.	Yes
+vehicle.plate	string	The license plate number of the vehicle.	Yes
+vehicle.capacity	integer	The seating capacity of the vehicle.	Yes
+vehicle.vehicleType	string	The type of vehicle (e.g., car, bike, etc.).	Yes
+Example Request Body
+json
+Copy
+Edit
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "SecureP@ss123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ1234",
+    "capacity": 4,
+    "vehicleType": "Car"
+  }
+}
+Response
+Success Response (201 Created)
+Upon successful registration, the API returns the following response:
+
+Field	Type	Description
+token	string	JWT token to authenticate future requests.
+captain	object	Details of the newly registered captain.
+Example Success Response
+json
+Copy
+Edit
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "63eaa7b1f1d0b723c5b5e73d",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ1234",
+      "capacity": 4,
+      "vehicleType": "Car"
+    }
+  }
+}
+Error Responses
+The API may return the following errors:
+
+Status Code	Message	Cause
+400 Bad Request	"All fields are required"	Required fields are missing in the request.
+400 Bad Request	"Captain already exists"	A captain with the same email is already registered.
+400 Bad Request	"Validation errors"	Request body validation failed (e.g., invalid email).
+500 Internal Server Error	"An unexpected error occurred"	Any unexpected server-side issue.
+Example Error Response
+json
+Copy
+Edit
+{
+  "message": "All fields are required"
+}
+Validation Rules
+Email: Must be a valid email format.
+Password: Must be at least 6 characters long.
+Vehicle Capacity: Must be a positive integer.
+Fullname: Both firstname and lastname must be at least 3 characters long.
+Testing
+Using Postman
+Set the HTTP Method to POST.
+Enter the endpoint URL: http://<your-server-url>/api/v1/captains/register.
+Add the required headers:
+Content-Type: application/json
+Provide the JSON body as shown in the example.
+Send the request.
+Notes
+Ensure the email field is unique to prevent duplicate registrations.
+The response includes a JWT token; securely store it for authenticating future requests.
+For server-side validation, error details are returned in an array under the errors key.
