@@ -23,8 +23,15 @@ module.exports = {
     try {
       // Hash the password before saving
       const hashedPassword = await bcrypt.hash(password, 10);
-
+      // check if user already exists
+      const isUserAlready = await userModel.findOne({email});
+      if (isUserAlready) {
+        return res
+         .status(400)
+         .json({ message: "User already exists - user controller error" });
+      }
       // Create user
+
       const user = await userService.createUser({
         firstname: fullname.firstname,
         lastname: fullname.lastname,

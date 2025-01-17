@@ -6,6 +6,7 @@ const cookieParser=require("cookie-parser");
 const app=express();
 const connecttodb=require('./db/db.js');
 const userRoutes=require('./routes/user.routes.js');
+const captainRoutes=require('./routes/captain.routes.js')
 
 connecttodb();
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use('/user',userRoutes);
+app.use('/captain',captainRoutes);
 app.use(cookieParser());
 
 app.get('/',(req, res) => {

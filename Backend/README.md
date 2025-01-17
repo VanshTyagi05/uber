@@ -171,3 +171,61 @@ This endpoint logs in an existing user by accepting their email and password. Up
 
 - `email` (string, required): The email address of the user. Must be a valid email format.
 - `password` (string, required): The password for the user account. Must be at least 6 characters long.
+
+Apologies for the confusion. If you're blacklisting the token, the logout endpoint should invalidate the token and remove it from the blacklist. Here's the updated documentation:
+
+###  Get /users/logout
+
+Logout the current user.
+
+#### Description
+
+This endpoint logs out the currently logged-in user by invalidating the JWT token and adding it to a blacklist. After successful logout, the user's socket ID is set to null.
+
+#### Request Body
+
+No request body is required for this endpoint.
+
+#### Response
+
+- **200 OK**
+
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+- **401 Unauthorized**
+
+  ```json
+  {
+    "message": "Invalid token - user controller error"
+  }
+  ```
+
+#### Required Data
+
+No required data for this endpoint.
+
+#### Notes
+
+- The JWT token should be included in the `Authorization` header with the format `Bearer <token>`.
+- The JWT token is added to a blacklist after successful logout.
+- The user's socket ID is set to null after successful logout.
+
+#### Example
+
+```bash
+curl --request POST \
+  --url http://localhost:5000/api/users/logout \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+```
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+Please note that you'll need to implement the blacklist functionality in your backend code to store and validate the blacklisted tokens.
