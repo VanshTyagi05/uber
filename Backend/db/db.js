@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 function connectdb() {
-    console.log('Attempting to connect to:', process.env.DB_CONNECT);
+    console.log('Attempting to connect to:MongoDb');
     mongoose
         .connect(process.env.DB_CONNECT)
         .then(() => {

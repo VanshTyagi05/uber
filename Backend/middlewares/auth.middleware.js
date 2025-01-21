@@ -9,7 +9,7 @@ module.exports.authUser = async (req, res, next) => {
     const token = req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
 
     if (!token) {
-      return res.status(401).json({ message: 'You are not authenticated' });
+      return res.status(401).json({ message: 'You are not authenticated -authUser middleware error' });
     }
 
     // Check if token is blacklisted using BlacklistToken model
@@ -42,7 +42,7 @@ module.exports.authCaptain=async(req,res,next)=>{
     const token=req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
     if(!token){
       // agar token nahi mila toh unauthorized status code bhejo
-      return res.status(401).json({message:'You are not authenticated'});
+      return res.status(401).json({message:'You are not authenticated -authMiddleware error'});
     }
     const isBlacklisted=await BlacklistToken.isTokenBlacklisted(token);
     if(isBlacklisted){
