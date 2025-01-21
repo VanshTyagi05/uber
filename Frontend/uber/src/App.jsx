@@ -7,15 +7,17 @@ import UserLogin from './pages/UserLogin'
 import CaptainSignup from './pages/CaptainSignup'
 import CaptainLogin from './pages/CaptainLogin'
 import { UserDataContext } from './context/UserContext'
-
+import { CaptainDataContext } from './context/CaptainContext'
 import Home from './pages/Home'
 import UserProtectWrapper from './pages/UserProtectWrapper'
 import UserLogout from './pages/UserLogout'
+import CaptainHome from './pages/CaptainHome'
 
 
 const App = () => {
   // we can now use context as the data provider for the entire app
   const ans=useContext(UserDataContext);
+  const captain=useContext(CaptainDataContext);
   console.log(ans);
   return (
     <div className='bg-red-900'>
@@ -39,6 +41,7 @@ const App = () => {
              <UserLogout/>
             </UserProtectWrapper>
         } />
+        <Route path='/captain-home' element={CaptainHome} />
 
       </Routes>
       </div>
