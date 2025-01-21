@@ -174,7 +174,7 @@ This endpoint logs in an existing user by accepting their email and password. Up
 
 Apologies for the confusion. If you're blacklisting the token, the logout endpoint should invalidate the token and remove it from the blacklist. Here's the updated documentation:
 
-###  Get /users/logout
+### Get /users/logout
 
 Logout the current user.
 
@@ -235,86 +235,88 @@ Please note that you'll need to implement the blacklist functionality in your ba
 This documentation provides a detailed guide for the Register Captain API endpoint, including request structure, validation rules, and expected responses.
 
 Endpoint Details
+
 #### URL
+
 POST /captain/register
 
 Headers
-Key	Value	Required
-Authorization	Bearer <token>	No
-Content-Type	application/json	Yes
+Key Value Required
+Authorization Bearer <token> No
+Content-Type application/json Yes
 Request Body
 The request body must contain both personal details and vehicle details as a JSON object.
 
 Personal Details
-Field	Type	Description	Required
-fullname.firstname	string	The first name of the captain.	Yes
-fullname.lastname	string	The last name of the captain.	Yes
-email	string	The email address of the captain (must be unique).	Yes
-password	string	A secure password for the captain's account.	Yes
+Field Type Description Required
+fullname.firstname string The first name of the captain. Yes
+fullname.lastname string The last name of the captain. Yes
+email string The email address of the captain (must be unique). Yes
+password string A secure password for the captain's account. Yes
 Vehicle Details
-Field	Type	Description	Required
-vehicle.color	string	The color of the captain's vehicle.	Yes
-vehicle.plate	string	The license plate number of the vehicle.	Yes
-vehicle.capacity	integer	The seating capacity of the vehicle.	Yes
-vehicle.vehicleType	string	The type of vehicle (e.g., car, bike, etc.).	Yes
+Field Type Description Required
+vehicle.color string The color of the captain's vehicle. Yes
+vehicle.plate string The license plate number of the vehicle. Yes
+vehicle.capacity integer The seating capacity of the vehicle. Yes
+vehicle.vehicleType string The type of vehicle (e.g., car, bike, etc.). Yes
 Example Request Body
 json
 Copy
 Edit
 {
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "password": "SecureP@ss123",
-  "vehicle": {
-    "color": "Red",
-    "plate": "XYZ1234",
-    "capacity": 4,
-    "vehicleType": "Car"
-  }
+"fullname": {
+"firstname": "John",
+"lastname": "Doe"
+},
+"email": "john.doe@example.com",
+"password": "SecureP@ss123",
+"vehicle": {
+"color": "Red",
+"plate": "XYZ1234",
+"capacity": 4,
+"vehicleType": "Car"
+}
 }
 Response
 Success Response (201 Created)
 Upon successful registration, the API returns the following response:
 
-Field	Type	Description
-token	string	JWT token to authenticate future requests.
-captain	object	Details of the newly registered captain.
+Field Type Description
+token string JWT token to authenticate future requests.
+captain object Details of the newly registered captain.
 Example Success Response
 json
 Copy
 Edit
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "captain": {
-    "_id": "63eaa7b1f1d0b723c5b5e73d",
-    "firstname": "John",
-    "lastname": "Doe",
-    "email": "john.doe@example.com",
-    "vehicle": {
-      "color": "Red",
-      "plate": "XYZ1234",
-      "capacity": 4,
-      "vehicleType": "Car"
-    }
-  }
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+"captain": {
+"\_id": "63eaa7b1f1d0b723c5b5e73d",
+"firstname": "John",
+"lastname": "Doe",
+"email": "john.doe@example.com",
+"vehicle": {
+"color": "Red",
+"plate": "XYZ1234",
+"capacity": 4,
+"vehicleType": "Car"
+}
+}
 }
 Error Responses
 The API may return the following errors:
 
-Status Code	Message	Cause
-400 Bad Request	"All fields are required"	Required fields are missing in the request.
-400 Bad Request	"Captain already exists"	A captain with the same email is already registered.
-400 Bad Request	"Validation errors"	Request body validation failed (e.g., invalid email).
-500 Internal Server Error	"An unexpected error occurred"	Any unexpected server-side issue.
+Status Code Message Cause
+400 Bad Request "All fields are required" Required fields are missing in the request.
+400 Bad Request "Captain already exists" A captain with the same email is already registered.
+400 Bad Request "Validation errors" Request body validation failed (e.g., invalid email).
+500 Internal Server Error "An unexpected error occurred" Any unexpected server-side issue.
 Example Error Response
 json
 Copy
 Edit
 {
-  "message": "All fields are required"
+"message": "All fields are required"
 }
 Validation Rules
 Email: Must be a valid email format.
@@ -333,3 +335,64 @@ Notes
 Ensure the email field is unique to prevent duplicate registrations.
 The response includes a JWT token; securely store it for authenticating future requests.
 For server-side validation, error details are returned in an array under the errors key.
+
+
+ ### Captain Authentication Endpoints
+
+#### Login Captain
+**URL**: `/captain/login`
+
+**Method**: `POST`
+
+**Request Body**:
+- `email`: String, required, must be a valid email
+- `password`: String, required, minimum 6 characters
+
+**Response**:
+- `200 OK`: Login successful
+- `401 Unauthorized`: Invalid credentials
+- `400 Bad Request`: Validation errors
+
+**Example Request**:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+ // response
+{
+  "success": true,
+  "data": {
+    "captain": {
+      "_id": "123456789",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "black",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+},
+
+
+#### Get Captain Profile
+URL: /captain/profile
+
+Method: GET
+
+Headers:
+
+Authorization: Bearer token required
+Response:
+
+200 OK: Profile retrieved successfully
+401 Unauthorized: Invalid/missing token
+404 Not Found: Captain not found
+
