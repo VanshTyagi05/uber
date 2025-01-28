@@ -73,7 +73,7 @@ const captainSchema=new mongoose.Schema({
       //required:true,
     }
   }
-})
+},{ timestamps: true })
 
 captainSchema.methods.generateAuthToken = async function () {
   const token = jwt.sign(

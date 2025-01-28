@@ -4,42 +4,20 @@ import axios from 'axios';
 
 const UserLogout = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const logoutUser = async () => {
-      const token = localStorage.getItem('token');
+  const handleLogout = () => {
+      // Clear any stored authentication tokens or captain data
+      localStorage.removeItem('token');
+     
       
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      try {
-        const response = await axios({
-          method: 'get',
-          url: `${import.meta.env.VITE_BASE_URL}/user/logout`,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.status === 200) {
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error('Logout error:', error);
-        if (error.response?.status === 401) {
-          // localStorage.removeItem("token");
-          alert('Logout error. Please try again.', error);
-          navigate("/login");
-        }
-      }
+      // Redirect to the login page or home page
+      navigate('/login');
     };
-
-    logoutUser();
-  }, [navigate]);
-
+  
+    // Execute logout when component mounts
+    useEffect(() => {
+      handleLogout();
+    }, []);
+ 
   return (
     <div>
       Logging out...

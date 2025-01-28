@@ -1,24 +1,28 @@
-const express=require('express');
-const dotenv=require('dotenv');
+const express = require("express");
+const dotenv = require("dotenv");
 dotenv.config();
-const cors=require('cors');
-const cookieParser=require("cookie-parser");
-const app=express();
-const connecttodb=require('./db/db.js');
-const userRoutes=require('./routes/user.routes.js');
-const captainRoutes=require('./routes/captain.routes.js')
-
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const app = express();
+const connecttodb = require("./db/db.js");
+const userRoutes = require("./routes/user.routes.js");
+const captainRoutes = require("./routes/captain.routes.js");
+const mapsRoutes = require("./routes/maps.routes.js");
+const rideRoutes = require("./routes/ride.routes.js");
 connecttodb();
 app.use(cors());
 
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use('/user',userRoutes);
-app.use('/captain',captainRoutes);
+app.use(express.urlencoded({ extended: true }));
+app.use("/user", userRoutes);
+app.use("/captain", captainRoutes);
+
+app.use("/maps", mapsRoutes);
+app.use("/ride", rideRoutes);
 app.use(cookieParser());
 
-app.get('/',(req, res) => {
-    res.send('Hello World');
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
 module.exports = app;
