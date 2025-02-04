@@ -12,7 +12,7 @@ const CaptainProtectWrapper = ({
   const [isLoading,setIsLoading] = useState(true);
   const { captain, setCaptain } = useContext(CaptainDataContext)
   useEffect(() => {
-    console.log(token);
+    // console.log(token);
     if (!token) {
       alert('token is not present');
         navigate('/captain-login')
@@ -24,14 +24,14 @@ const CaptainProtectWrapper = ({
             Authorization: `Bearer ${token}`
         }
     }).then(response => {
-       console.log(response);
+      //  console.log(response);
         if (response.status === 200) {
             setCaptain(response.data.captain)
             setIsLoading(false)
         }
     })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
             localStorage.removeItem('token')
             navigate('/captain-login')
         })

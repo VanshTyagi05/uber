@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useCallback } from "react";
 import axios from "axios";
 import debounce from "lodash/debounce";
@@ -10,6 +10,11 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
+
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
@@ -34,6 +39,31 @@ const Home = () => {
   const [ride, setRide] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext);
+  const { sendMessage, receiveMessage } = useContext(SocketContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    socket.emit("join", { userType: "user", userId: user._id })
+}, [ user ])
+
+socket.on('ride-confirmed', ride => {
+   console.log("ride-confirmed", ride);
+    
+    setVehicleFound(false)
+    setWaitingForDriver(true)
+    setRide(ride)
+    
+})
+
+socket.on('ride-started',ride=>{
+  console.log("ride-started",ride);
+  setWaitingForDriver(false);
+  navigate('/riding',{state:{ride}});
+})
 
   const fetchSuggestions = async (input, type) => {
     if (!input || input.length < 3) {
@@ -66,7 +96,29 @@ const Home = () => {
       setIsLoading(false);
     }
   };
-
+  const getFare = async (pickup, destination) => {
+    if (!pickup || !destination) return;
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/ride/get-fare`,
+        {
+          params: { pickup, destination },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Fare Response:", response.data);
+      // Update to access the fare object correctly
+      setFare(response.data.fare);
+    } catch (error) {
+      console.error("Fare calculation error:", error);
+      alert("Could not calculate fare. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const debouncedFetch = useCallback(
     debounce((value, type) => fetchSuggestions(value, type), 300),
     []
@@ -88,10 +140,16 @@ const Home = () => {
     if (!pickup || !destination) return;
 
     try {
+      // First get fare
+      await getFare(pickup, destination);
+
+      // Then show vehicle panel
+      gsap.to(vehiclePanelRef.current, {
+        transform: "translateY(0)",
+        duration: 0.5,
+      });
       setVehiclePanel(true);
       setPanelOpen(false);
-
-      // Add fare calculation logic here if needed
     } catch (error) {
       console.error("Find trip error:", error);
     }
@@ -185,6 +243,40 @@ const Home = () => {
     [waitingForDriver]
   );
 
+  socket.on("new-ride", (data) => {
+    setRide(data);
+    setRidePopupPanel(true);
+  });
+
+  async function createRide() {
+    try {
+      setIsLoading(true);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/ride/create`,
+        {
+          pickup,
+          destination,
+          vehicleType,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("Ride created:", response.data);
+      setRide(response.data);
+      setVehicleFound(true);
+      setConfirmRidePanel(false);
+    } catch (error) {
+      console.error("Create ride error:", error);
+      alert(error.response?.data?.message || "Failed to create ride");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="h-screen relative overflow-hidden">
       <img
@@ -193,8 +285,12 @@ const Home = () => {
         alt=""
       />
       <div className="h-screen w-screen">
-        {/* image for temporary use  */}
-        {/* <LiveTracking /> */}
+        {/* <img
+          className="h-full w-full object-cover"
+          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
+          alt=""
+        /> */}
+        <LiveTracking />
       </div>
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[30%] p-6 bg-white relative">
@@ -238,7 +334,7 @@ const Home = () => {
               placeholder="Enter your destination"
             />
           </form>
-          // In your form submit handler
+
           <button
             onClick={findTrip}
             className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full"
@@ -278,7 +374,7 @@ const Home = () => {
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
         <ConfirmRide
-          //createRide={createRide}
+          createRide={createRide}
           pickup={pickup}
           destination={destination}
           fare={fare}
@@ -292,9 +388,10 @@ const Home = () => {
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
         <LookingForDriver
-          //createRide={createRide}
+          createRide={createRide}
           pickup={pickup}
           destination={destination}
+          ride={ride}
           fare={fare}
           vehicleType={vehicleType}
           setVehicleFound={setVehicleFound}

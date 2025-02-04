@@ -18,14 +18,14 @@ const navigate=useNavigate();
     }
     try {
        const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, loginUser);
-        console.log(res);
+        
         
         if(res.status==200){
-          console.log("Login successful");
+         
           setUser(res.data.user);
           // we will store the token int the local storage
           localStorage.setItem('token',res.data.token);
-          console.log("Token stored in local storage",res.data.token);
+          
           // navigate to the home
           navigate('/home');
 

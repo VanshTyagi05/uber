@@ -12,7 +12,7 @@ const UserProtectWrapper = ({
   const [isLoading,setIsLoading] = useState(true);
   const { user, setUser } = useContext(UserDataContext)
   useEffect(() => {
-    console.log(token);
+    
     if (!token) {
       alert('token is not present');
         navigate('/login')
@@ -24,9 +24,9 @@ const UserProtectWrapper = ({
             Authorization: `Bearer ${token}`
         }
     }).then(response => {
-       console.log(response);
+      
         if (response.status === 200) {
-            setUser(response.data.captain)
+            setUser(response.data)
             setIsLoading(false)
         }
     })

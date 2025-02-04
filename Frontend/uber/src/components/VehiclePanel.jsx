@@ -1,6 +1,18 @@
 import React from 'react'
 
 const VehiclePanel = (props) => {
+   
+    if (!props.fare ) {
+        return (
+          <div className="flex items-center justify-center h-40">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
+              <p>Calculating fares...</p>
+            </div>
+          </div>
+        );
+      }
+    // now we will update it for the acurate values of fares calculated using the getFar enedpoint
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -8,8 +20,12 @@ const VehiclePanel = (props) => {
             }}><i className="text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
             <h3 className='text-2xl font-semibold mb-5'>Choose a Vehicle</h3>
             <div onClick={() => {
+                
                 props.setConfirmRidePanel(true)
                 props.selectVehicle('car')
+              
+                
+               
             }} className='flex border-2 active:border-black  mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
                 <div className='ml-2 w-1/2'>
@@ -22,6 +38,7 @@ const VehiclePanel = (props) => {
             <div onClick={() => {
                 props.setConfirmRidePanel(true)
                 props.selectVehicle('moto')
+              
             }} className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_638,w_956/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png" alt="" />
                 <div className='-ml-2 w-1/2'>
@@ -34,6 +51,8 @@ const VehiclePanel = (props) => {
             <div onClick={() => {
                 props.setConfirmRidePanel(true)
                 props.selectVehicle('auto')
+               
+               
             }} className='flex border-2 active:border-black mb-2 rounded-xl w-full p-3  items-center justify-between'>
                 <img className='h-10' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648431773/assets/1d/db8c56-0204-4ce4-81ce-56a11a07fe98/original/Uber_Auto_558x372_pixels_Desktop.png" alt="" />
                 <div className='ml-2 w-1/2'>

@@ -19,12 +19,12 @@ const CaptainLogin = () => {
       password
     };
     const res=await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, captainData);
-     console.log(res);
+    
     if(res.status===200){
       const data=res.data;
       setCaptain(data.data.captain);
       // print the token
-      console.log(data.data.token);
+      // console.log(data.data.token);
       localStorage.setItem('token',data.data.token);
       navigate('/captain-home');
     }

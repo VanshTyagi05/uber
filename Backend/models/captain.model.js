@@ -64,7 +64,7 @@ const captainSchema=new mongoose.Schema({
     
   },
   location:{
-    lat:{
+    ltd:{
       type:Number,
       //required:true,
     },
@@ -72,6 +72,9 @@ const captainSchema=new mongoose.Schema({
       type:Number,
       //required:true,
     }
+  },
+  socketId: {
+    type: String
   }
 },{ timestamps: true })
 
@@ -91,5 +94,5 @@ captainSchema.methods.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 }
 
-const Captain=mongoose.model('Captain',captainSchema);
+const Captain=mongoose.model('captain',captainSchema);
 module.exports=Captain;

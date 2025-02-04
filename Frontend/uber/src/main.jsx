@@ -5,16 +5,19 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "./context/UserContext.jsx";
 import CaptainContext from "./context/CaptainContext";
-import 'remixicon/fonts/remixicon.css'
+import SocketProvider from "./context/SocketContext.jsx";
+import "remixicon/fonts/remixicon.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CaptainContext>
-      <UserContext>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </UserContext>
-    </CaptainContext>
+    <SocketProvider>
+      <CaptainContext>
+        <UserContext>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </UserContext>
+      </CaptainContext>
+    </SocketProvider>
   </StrictMode>
 );

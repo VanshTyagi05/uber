@@ -1,6 +1,7 @@
 import React from 'react'
 
 const RidePopUp = (props) => {
+    // console.log(props.ride)
     return (
         <div>
             <h5 className='p-1 text-center w-[93%] absolute top-0' onClick={() => {
@@ -41,6 +42,7 @@ const RidePopUp = (props) => {
                 <div className='mt-5 w-full '>
                     <button onClick={() => {
                         props.setConfirmRidePopupPanel(true)
+                        // this will rediret the captain to new page if he confirm the request
                         props.confirmRide()
 
                     }} className=' bg-green-600 w-full text-white font-semibold p-2 px-10 rounded-lg'>Accept</button>

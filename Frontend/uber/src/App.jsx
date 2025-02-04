@@ -24,7 +24,7 @@ const App = () => {
   // we can now use context as the data provider for the entire app
   const ans = useContext(UserDataContext);
   const captain = useContext(CaptainDataContext);
-  console.log(ans);
+ 
   return (
     <div className="bg-red-900">
       <Routes>
