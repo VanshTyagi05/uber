@@ -19,6 +19,7 @@ import ConfirmRidePopUp from "./components/ConfirmRidePopUp";
 import CaptainRiding from "./pages/CaptainRiding";
 import Riding from "./pages/Riding";
 import FinishRide from "./components/FinishRide";
+import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   // we can now use context as the data provider for the entire app
@@ -70,6 +71,7 @@ const App = () => {
         <Route path="/ridepop" element={<RidePopUp/>} />
         <Route path="/cnfridepop" element={<ConfirmRidePopUp/>} />
         <Route path="/finish-ride" element={<FinishRide/>} />
+        <Route path='/user-profile' element={<UserProfile/>} />
         
       </Routes>
     </div>
