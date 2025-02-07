@@ -19,7 +19,7 @@ function initializeSocket(server) {
     console.log('Client connected:', socket.id, 'at the',currentTime);
 
     socket.on('join', async (data) => {
-      console.log('Join event received:', data);
+      // console.log('Join event received:', data);
       // join event call krege toh usme ek object bhejna hoga jiske andr userId hogi aur userTpe hoga
       // Add data validation
       if (!data || !data.userId || !data.userType) {

@@ -50,7 +50,7 @@ const CaptainHome = () => {
   }, [socket]);
 
   socket.on("new-ride", (data) => {
-    console.log(data);
+   // console.log(data);
     setRide(data);
     setRidePopupPanel(true);
   });
@@ -75,7 +75,7 @@ const CaptainHome = () => {
       }
     );
 
-    console.log(response);
+   // console.log(response);
 
     setRidePopupPanel(false);
     setConfirmRidePopupPanel(true);

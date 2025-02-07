@@ -51,7 +51,7 @@ const Home = () => {
 }, [ user ])
 
 socket.on('ride-confirmed', ride => {
-   console.log("ride-confirmed", ride);
+   //console.log("ride-confirmed", ride);
     
     setVehicleFound(false)
     setWaitingForDriver(true)
@@ -60,7 +60,7 @@ socket.on('ride-confirmed', ride => {
 })
 
 socket.on('ride-started',ride=>{
-  console.log("ride-started",ride);
+  //console.log("ride-started",ride);
   setWaitingForDriver(false);
   navigate('/riding',{state:{ride}});
 })
@@ -109,7 +109,7 @@ socket.on('ride-started',ride=>{
           },
         }
       );
-      console.log("Fare Response:", response.data);
+      //console.log("Fare Response:", response.data);
       // Update to access the fare object correctly
       setFare(response.data.fare);
     } catch (error) {
@@ -157,7 +157,7 @@ socket.on('ride-started',ride=>{
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(pickup, destination);
+    //console.log(pickup, destination);
   };
   useGSAP(
     function () {
@@ -265,7 +265,7 @@ socket.on('ride-started',ride=>{
           },
         }
       );
-      console.log("Ride created:", response.data);
+     // console.log("Ride created:", response.data);
       setRide(response.data);
       setVehicleFound(true);
       setConfirmRidePanel(false);
