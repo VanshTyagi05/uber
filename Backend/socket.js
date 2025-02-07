@@ -6,7 +6,7 @@ let io;
 function initializeSocket(server) {
   io = socketIO(server, {
     cors: {
-      origin: process.env.FRONTEND_URL || "http://localhost:5173",
+      origin: process.env.FRONTEND_URL || "https://uber-clone-app.onrender.com",
       methods: ["GET", "POST"],
       credentials: true,
       allowedHeaders: ["*"]

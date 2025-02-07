@@ -12,7 +12,11 @@ const rideRoutes = require("./routes/ride.routes.js");
 connecttodb();
 app.use(cors());
 
-app.use(express.json());
+//app.use(express.json());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "https://uber-clone-app.onrender.com",
+  credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use("/user", userRoutes);
 app.use("/captain", captainRoutes);
